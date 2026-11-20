@@ -1,0 +1,151 @@
+table,internal_name,release_name,released,meaning
+subnetwork,subnetwork_id,sword_subnetwork_id,yes,SWORD v17c subnetwork (river system) id
+subnetwork,river_name,sword_river_name,yes,SWORD river name of the system: the name most of its reaches bear; empty (null) when no reach has a name
+subnetwork,continent,sword_continent,yes,SWORD continent code (NA is North America)
+subnetwork,reach_count,sword_reach_count,yes,number of SWORD reaches in the system
+subnetwork,sword_km,sword_river_length_km,yes,total SWORD reach length of the system (km)
+subnetwork,sea_fraction,sea_fraction,yes,fraction of the SWORD river length beyond the MERIT coastline
+subnetwork,basin_id,basin_id,yes,"FlowNest basin holding the most land river length of the system, as the FullBasin global basin ID, which may be a basin smaller than 1 km2 that is not in the basin table of the release; 0 if the system lies only in the sea"
+subnetwork,flowdivide_level3_id,flowdivide_level3_id,no,FlowDivide level-3 group of basin_id; 0 if no basin
+subnetwork,basin_area_km2,basin_area_km2,no,upstream area of the basin_id outlet (km2; MERIT upa)
+subnetwork,is_endorheic,is_endorheic,no,"1 if basin_id is an endorheic basin, else 0; empty if no basin, or if basin_id is a basin under 1 km2 (not in the FlowNest basin table)"
+subnetwork,share,river_length_share,yes,fraction of the land river length of the system inside basin_id
+subnetwork,second_basin_id,second_basin_id,yes,"FlowNest basin with the second most land river length, as the FullBasin global basin ID, which may be a basin smaller than 1 km2 that is not in the basin table of the release; 0 if none"
+subnetwork,second_share,second_river_length_share,yes,fraction of the land river length inside second_basin_id
+subnetwork,second_area_km2,second_basin_area_km2,no,upstream area of the second_basin_id outlet (km2)
+subnetwork,other_large_basin_count,other_large_basin_count,yes,"number of other basins larger than 1,000 km2 holding at least 5% of the land river length"
+subnetwork,other_large_basin_id,other_large_basin_id,yes,"of those other large basins, the one with the largest river length share; 0 if none"
+subnetwork,other_large_share,other_large_river_length_share,yes,fraction of the land river length inside other_large_basin_id
+subnetwork,other_large_area_km2,other_large_basin_area_km2,no,upstream area of the other_large_basin_id outlet (km2)
+subnetwork,best_outlet_reach,sword_outlet_reach_id,no,SWORD outlet reach draining the most river length of the system; 0 if none
+subnetwork,outlet_basin_id,outlet_basin_id,no,"FlowNest basin holding sword_outlet_reach_id, or the first reach upstream from it that lies in a basin when outlet_steps_up > 0, as the FullBasin global basin ID, which may be a basin smaller than 1 km2 that is not in the basin table of the release; 0 if none"
+subnetwork,outlet_steps_up,outlet_steps_up,no,reaches walked upstream from sword_outlet_reach_id until one lies in a FlowNest basin; empty if none found
+subnetwork,systems_in_basin,sword_subnetworks_in_basin,no,number of SWORD systems whose basin_id is this basin; empty if no basin
+subnetwork,status,status,yes,"one_basin (basin_id holds at least 95% of the land river length) / main_basin_plus_small_bits (less than 95%, and no other basin larger than 1,000 km2 holds 5%) / also_in_other_large_basin (other_large_basin_count is at least 1) / no_land (the system lies only in the sea)"
+subnetwork,link_kind,link_kind,yes,"for status also_in_other_large_basin: how SWORD links basin_id with the other large basin (estuary_delta, inland_lake, inland_divide, inland_bifurcation, inland_canal, cut_inside_reach); empty otherwise"
+subnetwork,link_direct,link_direct,no,"for status also_in_other_large_basin: True if a SWORD reach crosses directly from one basin to the other, else False (as text); empty otherwise"
+subnetwork,link_count,link_count,no,number of SWORD links between the two basins; empty if not also_in_other_large_basin
+subnetwork,link_lakeflags,link_sword_lakeflags,no,SWORD lakeflag values of the linking reaches
+subnetwork,link_dist_to_sea_km,link_sword_dist_out_km,no,"smallest SWORD dist_out of the linking reaches (distance along SWORD to the system outlet, km)"
+subnetwork,wse_rise_m,sword_wse_rise_m,no,SWORD water surface rise going downstream across the link (m)
+subnetwork,issue,issue,no,issue codes; several are joined by '; ' in the same order in issue / cause / action / why_not_fixed
+subnetwork,cause,cause,no,why each issue happens
+subnetwork,action,action,no,what was done for each issue
+subnetwork,why_not_fixed,why_not_fixed,no,why each issue was not fixed further
+reach,reach_id,sword_reach_id,yes,SWORD v17c reach id
+reach,sword_reach_seq_id,sword_reach_seq_id,yes,"global number of placed reaches in FlowNest pixel order (by most_downstream_pixel_seq_id; reaches sharing that pixel by smaller SWORD dist_out of the node there, then sword_reach_id); 0 if no node of the reach was placed"
+reach,upstream_sword_reach_count,upstream_sword_reach_count,yes,"number of placed SWORD reaches upstream along FlowNest flow, the reach itself included; they are [sword_reach_seq_id, sword_reach_seq_id + count)"
+reach,flownest_downstream_pixel_seq_id,most_downstream_pixel_seq_id,yes,smallest pixel_seq_id among the placed nodes of the reach (its most downstream pixel along FlowNest flow when those nodes lie on one flow line); 0 if none placed
+reach,subnetwork_id,sword_subnetwork_id,yes,SWORD subnetwork id
+reach,basin_id,basin_id,yes,"FlowNest basin holding most_downstream_pixel_seq_id; 0 if no node is placed. It may differ from own_basin_id, the basin the reach was searched in"
+reach,system_basin_id,subnetwork_basin_id,no,"basin_id of the system in the subnetwork table (the FullBasin global basin ID, which may be a basin smaller than 1 km2 that is not in the basin table of the release); 0 if none"
+reach,reach_length_km,sword_reach_length_km,yes,SWORD reach length (km)
+reach,width_m,sword_width_m,yes,"SWORD reach width (m), as SWORD v17c gives it (363 reaches hold -1, kept unchanged)"
+reach,lakeflag,sword_lakeflag,yes,SWORD lakeflag (0 river; 1 lake or reservoir; 2 canal; 3 tidal)
+reach,type,sword_type,yes,"SWORD reach type attribute (1 river, 3 lake on river, 4 dam or waterfall, 5 unreliable topology, 6 ghost reach); in v17c it differs from the last digit of sword_reach_id for some reaches"
+reach,main_side,sword_main_side,yes,SWORD main_side (0 main; 1 side channel; 2 secondary outlet)
+reach,river_name,sword_river_name,yes,"SWORD river name, NODATA (as in SWORD) when it has none"
+reach,own_basin_id,own_basin_id,yes,"FlowNest basin holding the most land river length of this reach, as the FullBasin global basin ID, which may be a basin smaller than 1 km2 that is not in the basin table of the release; 0 if none of its land length lies in a numbered basin (in the sea, or only in coastal basins smaller than 0.05 km2): the reach is then searched in the basin of its subnetwork (basin_id of the subnetwork table)"
+reach,sea_fraction,sea_fraction,yes,fraction of the reach length beyond the MERIT coastline (1 for the 12 reaches of the 3 systems with no land)
+reach,match_stage,match_stage,no,"0 not matched; 1 found in a 3x3 to 7x7 window; 2 found beyond 7x7 through matched neighbour reaches, including reaches whose final path (after a path switch) needs a window beyond 7x7; 3 placed between matched neighbours (between_neighbors), two paths against the flow (against_flow), taken by one of four extra rules (land_part_cover, partly_on_neighbor_path, within_water_surface, short_path_into_neighbor; see neighbor_relation), or switched or matched by the same-water rule (area_guided); 4 matched from its nodes continued from a neighbour reach"
+reach,found_window,found_window,no,"smallest window (pixels) in which the final path(s) cover 80% of the reach: for a path switch the switch window, for between_neighbors the stage 2 window, for the four extra rules the window used by the rule; for area_guided the stage 2 window; for two paths the order is ignored, so a few stage 2 pairs and some against_flow pairs have a window of 7 or less; 0 if not matched or match_stage 4"
+reach,stage2_iteration,stage2_iteration,no,round of stage 2 in which the reach was matched; 0 otherwise (also for reaches in stage 2 only because of a path switch)
+reach,stage2_search_window,stage2_search_window,no,stage 2 search window of the system (pixels); used only by stages 2 and 3; 0 if the system has no basin
+reach,match_kind,match_kind,no,one_path / two_paths / between_neighbors / two_paths_against_flow / continued_from_neighbor / not_found
+reach,neighbor_relation,neighbor_relation,no,"relation to matched neighbour reaches (same_path, connected_path, ...); for match_stage 3 the rule that took the reach (between_neighbors, against_flow, land_part_cover, partly_on_neighbor_path, within_water_surface, short_path_into_neighbor, area_guided)"
+reach,path_seq_id,path_seq_id_1km2,yes,matched FlowNest path of the reach (the upstream one when two paths are needed); 0 if not matched
+reach,path2_seq_id,path2_seq_id_1km2,yes,FlowNest path holding the downstream part when two paths are needed; else 0
+reach,cover,cover,yes,"fraction of the reach length lying on the matched path(s), a point counting when the path passes within the search window of the step that matched it (3x3 to 7x7 pixels, wider for the later steps): at least 0.8 for 3x3, 5x5, 7x7, beyond_7x7, against_flow, within_water_surface and short_path_into_neighbor; at least 0.5 for partly_on_neighbor_path, area_guided_switch and area_guided_rescue; any value (even 0) for between_neighbors; for land_part_cover the cover of the whole reach, its sea part included (its land part is covered at least 80%); for continued_from_neighbor the fraction of all nodes of the reach on the matched path(s) (at least 0.8); empty if not_matched"
+reach,runner_up_path_seq_id,runner_up_path_seq_id_1km2,no,second best single path
+reach,runner_up_cover,runner_up_cover,no,cover of runner_up_path_seq_id_1km2
+reach,pair_unordered_cover,pair_unordered_cover,no,cover of two paths ignoring their order (reference only)
+reach,rejected_pairs,rejected_pairs,no,"two paths (one flowing into the other) that together cover at least 80% of the reach, but less than 80% in flow order, so not used (path+path:cover in flow order)"
+reach,against_flow_pairs,against_flow_pairs,no,path pairs used against flow for a SWORD side channel (path+path:cover)
+reach,fix_note,fix_note,yes,"path fixes after the first match: through_path_switch (switched to the path through both neighbour reaches), upstream_continuation_switch (switched to the path the downstream neighbour reach continues upstream on), area_guided_switch (switched by the same-water rule), pair_rejected_order (two paths covering the reach only in the wrong flow order were not used); several joined by ';'; empty if none"
+reach,switched_from_path_seq_id,switched_from_path_seq_id_1km2,no,"path just before the last switch (for a reach switched first by a geometric rule and then by upstream area, the path after the geometric switch; for a reach that had two paths and was switched by upstream area to one of them, the dropped one)"
+reach,area_ratio_before_switch,area_ratio_before_switch,no,"upstream_area_to_sword_facc_ratio of the match just before the last switch, of its two paths together when it had two (reference only); empty if no switch"
+reach,switch_not_done,switch_not_done,no,"switch that would need a larger window and was not done by that rule (path:upstream_continuation_switch:needs_KxK, the path the downstream neighbour reach continues upstream on and the window it would need); a reach with area_guided switch was switched later by upstream area, possibly to this same path"
+reach,switch_window,switch_window,no,"window (pixels) of the last switch: for a geometric switch, the window in which the switched-to path covers 80% of the reach; for an area-guided switch, the stage 2 window, in which it covers at least half; 0 if no switch"
+reach,land_cover,land_cover,no,land_part_cover only: fraction of the land part of the reach covered by the matched path; empty otherwise
+reach,merit_water_fraction,merit_water_fraction,no,"four extra rules only, SWORD width at least 100 m: length fraction of the reach whose nearest matched path pixel has MERIT water (wth not 0 and not -9999); empty otherwise"
+reach,rescue_not_done,rescue_not_done,no,"reaches not matched in stages 1 to 3 (match_stage 0, or 4 when matched later from their nodes) that the four extra rules tried: where each rule stopped (rule name: check, e.g. partly_on_neighbor_path:cover<0.5), joined by ';'; lake_not_rescued for lake reaches; empty otherwise"
+reach,median_pixel_distance,median_pixel_distance,no,median Chebyshev distance (pixels) from sample points to the matched path
+reach,neighbors_matched,neighbors_matched,no,number of matched SWORD neighbour reaches (stages 1 to 3 only; 0 for match_stage 0 and 4)
+reach,neighbors_connected,neighbors_connected,no,how many of them connect along FlowNest flow (stages 1 to 3 only; 0 for match_stage 0 and 4)
+reach,merit_upa_on_path_km2,upstream_area_on_path_km2,yes,median upstream area of the matched path pixels nearest the sample points of the reach (km2; MERIT upa); for continued_from_neighbor the median over its nodes on the matched path(s); empty if not matched or no sample point near the path
+reach,sword_facc_total_km2,sword_facc_total_km2,yes,"median over the nodes of the reach of the SWORD node facc_total (km2; SWORD v17c (build 0.0.15, Zenodo 23870877) facc_total: the drainage area of the whole river, all channels at a split counted together, which SWORD recommends for comparisons with gauges and basins; empty if no node has one)"
+reach,area_ratio,upstream_area_to_sword_facc_ratio,yes,median over the sample points of the reach of the MERIT upa of the nearest pixel on the matched path(s) divided by the sword_facc_total_km2 of the node of that point; for continued_from_neighbor the median over its nodes on the matched path(s); 0.5 to 2 counts as agreeing (area_check); empty if not matched or no sample point near the path
+reach,area_check,area_check,yes,"agrees: upstream_area_to_sword_facc_ratio is within 0.5 to 2; disagrees: it is not (review: see area_note and same_area_pixel_distance_km); no_facc: no ratio (no sample point near the path, or no SWORD facc_total); used_in_matching: the path was chosen by its upstream area (matched_at_step area_guided_rescue or area_guided_switch, or area_guided_switch in fix_note), so the ratio is not an independent check; empty if not matched"
+reach,area_note,area_note,yes,"likely reasons for area_check disagrees, joined by "";"" (several may apply; they do not prove the match right): side_channel (sword_main_side not 0: MERIT D8 draws one channel, and the SWORD facc_total of a side channel is that of the whole river), ghost (sword_type 6), lake (sword_lakeflag 1), sword_facc_jump_in_reach (the SWORD node facc_total changes more than 2 times within the reach: may indicate a confluence inside it), sword_facc_not_monotone (the SWORD facc_total is out of order with the neighbour reaches), sword_facc_flag_suspect / sword_facc_flag_same_river / sword_facc_flag_braid_share / sword_facc_flag_delta_arm / sword_facc_flag_filled (SWORD's own facc_flag of the reach is not ok; the SWORD v17c release notes say to use facc_flag for warnings), no_same_area_pixel_within_11km (no MERIT pixel within 11 km of any node has an upstream area within 2 times of the node facc_total); empty otherwise"
+reach,same_area_pixel_distance_km,same_area_pixel_distance_km,yes,"for matched reaches with area_check disagrees: distance (km) from each SWORD node to the nearest MERIT pixel whose upstream area is within 2 times of the node facc_total, searched within 11 km, median over the nodes that have one (nodes without one are left out, so it does not say how many nodes have one); short: near those nodes a MERIT pixel (on a FlowNest path longer than 8 km or not) carries the SWORD facc_total, so check the match; long: none nearby carries it, empty: none within 11 km for any node; when long or empty, no better path was found and MERIT and SWORD disagree on the area there"
+reach,area_guided,area_guided,no,"switch: the path was switched by the same-water rule to the one long path whose upstream area agrees with the SWORD facc_total (the path before this switch is switched_from_path_seq_id_1km2); rescue: the reach, not matched by the geometric rules, was matched this way; empty otherwise"
+reach,area_guided_not_done,area_guided_not_done,no,"for main-channel reaches tried by the same-water rule (not matched, or matched with area_check disagrees): why it did not switch or match them: no_path_cover>=0.5 (no path covers half the reach in the stage 2 window), no_path_with_same_area, two_paths_with_same_area, short_path (the only agreeing path is 8 km or shorter), direction_unknown (the reach has one node only, so the flow direction cannot be checked), path_not_along_whole_reach (the agreeing path does not reach both ends), against_flow (the upstream area on it decreases along SWORD), neighbor_conflict (it is neither the path of a trusted matched neighbour reach nor joins it), no_trusted_neighbor (it covers less than 80% and no matched neighbour reach supports it: one whose area agrees, or one already switched or matched by upstream area), far_without_witness (it lies off the river corridor, median distance more than half the river width plus 180 m and more than 3 pixels, and no such neighbour reach supports it), neighbor_switch_conflict (a neighbour reach could be switched or matched in the same round to a path that neither is the same as nor joins this one, so neither is taken), same_as_current (the agreeing path is already the only matched path); empty otherwise: also for reaches the rule does not try (sword_main_side not 0, no own basin, at least half in the sea, or a SWORD facc_total not in order with the neighbour reaches) and for match_stage 4 (matched in node placement, after the same-water rule)"
+reach,not_found_reason,not_found_reason,no,why not matched
+reach,best_cover_3x3,best_cover_3x3,no,"best single-path cover in 3x3, in the basin the reach was searched in; empty if not searched"
+reach,best_cover_5x5,best_cover_5x5,no,"best single-path cover in 5x5, in the basin the reach was searched in"
+reach,best_cover_7x7,best_cover_7x7,no,"best single-path cover in 7x7, in the basin the reach was searched in"
+reach,best_cover_stage2_window,best_cover_stage2_window,no,"best single-path cover in the stage 2 window, in the basin the reach was searched in; empty if not searched"
+reach,path_length_km,path_length_km,no,"length of path_seq_id_1km2 (km), written to 2 decimals; the 8 km limit of the matching is taken on the length before rounding, so a matched path of 8.003 km shows 8.0; empty if not matched"
+reach,path_level,path_level,no,FlowNest path_level of path_seq_id_1km2; empty if not matched
+reach,matched_at_step,matched_at_step,yes,the step that matched the reach (the steps of the paper's Appendix B): 3x3 / 5x5 / 7x7 / beyond_7x7 / between_neighbors / against_flow / land_part_cover / partly_on_neighbor_path / within_water_surface / short_path_into_neighbor / area_guided_switch / area_guided_rescue / continued_from_neighbor / not_matched
+reach,not_found_reason_before_stage4,not_found_reason_before_stage4,no,not_found_reason before stage 4
+reach,continued_from_reach_id,continued_from_sword_reach_id,yes,for matched_at_step continued_from_neighbor: the neighbour SWORD reach whose path was continued; 0 otherwise
+reach,stage4_not_done,stage4_not_done,no,why stage 4 did not match it
+reach,nodes,nodes,yes,number of SWORD nodes in the reach
+reach,nodes_placed,nodes_placed,yes,number of them placed on a FlowNest pixel
+reach,upstream_end_pixel_seq_id,sword_upstream_end_pixel_seq_id,yes,pixel of the SWORD upstream end node (largest SWORD dist_out); 0 if that node was not placed
+reach,downstream_end_pixel_seq_id,sword_downstream_end_pixel_seq_id,yes,pixel of the SWORD downstream end node (smallest SWORD dist_out); 0 if that node was not placed
+reach,orientation,orientation,yes,"along_flow / reversed: whether the SWORD node order runs along the pixel chain of the matched path(s), which follows FlowNest flow except on the second path of a two_paths_against_flow match; empty if not_matched or continued_from_neighbor"
+reach,total_distance_forward_m,total_distance_forward_m,no,sum of node to pixel distances when placed along flow (m)
+reach,total_distance_reversed_m,total_distance_reversed_m,no,the same when placed reversed (m)
+reach,line_reach_direction,upstream_area_direction,no,same / reversed / equal / too_short_to_tell / no_points_near_path: MERIT upa at the SWORD upstream 20% versus downstream 20% of the reach; empty if not matched in stages 1 to 3
+reach,nodes_continued_from_neighbor,nodes_continued_from_neighbor,no,nodes placed by continuing from a neighbour reach
+reach,median_distance_m,median_distance_to_pixel_m,yes,median node to pixel distance (m)
+reach,max_distance_m,max_distance_to_pixel_m,no,largest node to pixel distance (m)
+reach,nodes_far_from_pixel,nodes_far_from_pixel,yes,nodes farther than half the width + 180 m from their pixel
+reach,nodes_sharing_pixel,nodes_sharing_pixel,no,number of placed nodes on a pixel that holds another node (of any SWORD system)
+reach,nodes_upa_decreases,nodes_upstream_area_decreases,no,number of placed nodes whose upstream area is smaller than at the previous node upstream along SWORD
+reach,match_confidence,match_confidence,yes,"how far the match can be trusted: high (all checks pass), medium (usable; matched by a rescue or neighbour rule, against the flow, another path backed by a neighbour left unresolved, or the upstream area differs from SWORD facc for a likely reason such as SWORD's own facc_flag), low (check before use), not_found (no FlowNest match); see README"
+reach,confidence_reason,confidence_reason,yes,"why the row has its match_confidence, codes joined by '; ' (their meanings are in README): for high the four checks passed (cover_at_least_80pct; upstream_area_agrees; most_nodes_near_pixel; along_flow), for medium and low the codes that set the tier, for not_found why the reach was not matched (far_from_path, partly_on_path, mostly_sea, only_short_path_nearby, no_matched_neighbor, candidate_not_connected, not_in_any_basin, no_land)"
+reach,issue,issue,no,issue codes; several are joined by '; ' in the same order in issue / cause / action / why_not_fixed
+reach,cause,cause,no,why each issue happens
+reach,action,action,no,what was done for each issue
+reach,why_not_fixed,why_not_fixed,no,why each issue was not fixed further
+node,subnetwork_id,sword_subnetwork_id,no,SWORD subnetwork id
+node,node_id,sword_node_id,yes,SWORD v17c node id
+node,sword_node_seq_id,sword_node_seq_id,yes,"global number of placed nodes in FlowNest pixel order (by pixel_seq_id; on one pixel smaller SWORD dist_out first, then sword_node_id); 0 if not placed"
+node,upstream_sword_node_count,upstream_sword_node_count,yes,"number of placed SWORD nodes upstream along FlowNest flow, the node itself included; they are [sword_node_seq_id, sword_node_seq_id + count)"
+node,reach_id,sword_reach_id,yes,SWORD reach id
+node,node_order,sword_node_order,yes,SWORD node_order within the reach
+node,dist_out_m,sword_dist_out_m,no,SWORD distance to the outlet (m)
+node,lon,sword_lon,yes,SWORD node longitude
+node,lat,sword_lat,yes,SWORD node latitude
+node,width_m,sword_width_m,yes,"SWORD node width (m), as SWORD v17c gives it (some nodes hold -1, -0.5 or -0.25, kept unchanged)"
+node,max_width_m,sword_max_width_m,no,"SWORD node max width (m), as SWORD v17c gives it (-9999: none; some nodes hold small negative values, kept unchanged)"
+node,lakeflag,sword_lakeflag,yes,SWORD lakeflag
+node,n_chan_max,sword_n_chan_max,no,SWORD n_chan_max
+node,main_side,sword_main_side,yes,SWORD main_side (0 main; 1 side channel; 2 secondary outlet)
+node,pixel_seq_id,pixel_seq_id,yes,FlowNest channel pixel the node is placed on; 0 if not placed
+node,row,row,yes,"MERIT 90 m row of the pixel, counted from 0 at the north edge; empty if not placed"
+node,col,col,yes,"MERIT 90 m column of the pixel, counted from 0 at the west edge (col 0 is a real column); empty if not placed"
+node,reach_seq_id,reach_seq_id_1km2,yes,FlowNest reach of the pixel; 0 if not placed
+node,path_seq_id,path_seq_id_1km2,yes,FlowNest path of the pixel; 0 if not placed
+node,placed_by,placed_by,yes,matched_path / continued_from_neighbor / empty (not placed)
+node,continued_from_reach_id,continued_from_sword_reach_id,no,neighbour SWORD reach whose path was continued; 0 otherwise
+node,part,part,no,"a on path_seq_id_1km2 of the reach; b on path2_seq_id_1km2; empty if not placed, or for a continued node on another path"
+node,chain_pos,chain_pos,no,"position on the pixel chain of the reach path(s), or of the continued path, counted from 1 at the first pixel; 0 if not placed"
+node,orientation,orientation,no,along_flow / reversed: whether the SWORD node order runs along the pixel chain of the path(s) (as for the reach); along_flow gives the flow direction; empty if not placed
+node,along_flownest_flow,along_flow,no,"True if the node order runs along FlowNest flow here, False if against it; empty if not placed"
+node,distance_m,distance_to_pixel_m,yes,node to pixel centre distance (m); empty if not placed
+node,nearest_on_path_m,nearest_on_path_m,no,"distance to the nearest pixel of the reach path(s), or of the continued path for a node continued from a neighbour reach (m)"
+node,nearest_flownest_channel_m,nearest_channel_m,no,"distance to the nearest FlowNest channel pixel of any path (m); computed only for nodes of reaches not matched in stages 1 to 3, when continuing from neighbour reaches; empty otherwise"
+node,nodes_on_this_pixel,nodes_on_this_pixel,yes,number of SWORD nodes (of any system) on this pixel; 0 if not placed
+node,merit_upa_km2,upstream_area_km2,yes,upstream area of the pixel (km2; MERIT upa: the same value as in the FlowNest pixel table); empty if not placed
+node,sword_facc_total_km2,sword_facc_total_km2,yes,"SWORD node facc_total (km2; SWORD v17c (build 0.0.15, Zenodo 23870877) facc_total: the drainage area of the whole river, all channels at a split counted together, which SWORD recommends for comparisons with gauges and basins; empty if SWORD has none)"
+node,upa_to_facc_ratio,upstream_area_to_sword_facc_ratio,no,upstream_area_km2 / sword_facc_total_km2
+node,match_confidence,match_confidence,yes,how far the node's pixel can be trusted: the worse of the node's own tier and its reach's (a placed node of a reach not found is at most low); not_found when the node is not placed
+node,confidence_reason,confidence_reason,yes,"the node's own codes that set its tier (or node_near_pixel when high), then reach_<tier> of its reach; the reach's reasons are in the reach table; the meanings of the codes are in README"
+node,issue,issue,no,issue codes; several are joined by '; ' in the same order in issue / cause / action / why_not_fixed
+node,cause,cause,no,why each issue happens
+node,action,action,no,what was done for each issue
+node,why_not_fixed,why_not_fixed,no,why each issue was not fixed further

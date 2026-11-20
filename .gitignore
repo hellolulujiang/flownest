@@ -1,0 +1,21 @@
+# build and cache files
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.DS_Store
+# working notes of the authors, not part of the package
+progress.md
+findings.md
+task_plan.md
+# outputs and inputs of the paper's scripts (the folders are kept by .gitkeep)
+paper/Data/*
+paper/Figures/*
+paper/Drafts/*
+!paper/Data/.gitkeep
+!paper/Figures/.gitkeep
+!paper/Drafts/.gitkeep
+paper/input/flownest/
+paper/input/raw/
